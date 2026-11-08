@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Painel de Monitoramento &amp; Cliques - ReloaderCapt Pro</title>
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>🛡️ ReloaderCapt Pro — Resumo de Monitoramento &amp; Capturas</h1>
+      <p id="status-feedback">Acompanhe em tempo real todos os elementos clicados (CSS, XPath, Links, Cores, Cards) e ciclos de reload</p>
+    </div>
+    <div class="topbar-actions">
+      <button id="export-json-btn" class="btn-secondary" type="button" title="Exportar backup em JSON">📥 Exportar JSON</button>
+      <button id="import-json-btn" class="btn-secondary" type="button" title="Importar backup em JSON">📤 Importar JSON</button>
+      <input id="import-file-input" type="file" accept=".json" style="display:none;">
+      <button id="load-demo-btn" class="btn-secondary" type="button" style="border-color:#8b5cf6; color:#c4b5fd;">
+        🧪 Carregar Lista de Teste
+      </button>
+      <button id="view-columns-btn" class="btn-secondary active" type="button">🗂️ Visão em Colunas</button>
+      <button id="view-table-btn" class="btn-secondary" type="button">📋 Visão Tabela Completa</button>
+      <button id="start-all-btn" class="btn-success" type="button">▶ Iniciar Todos</button>
+      <button id="stop-all-btn" class="btn-danger" type="button">⏹ Parar Todos</button>
+    </div>
+  </header>
+
+  <!-- RESUMO GERAL DO MONITORAMENTO E CLIQUES (KPIs) -->
+  <section class="summary-grid">
+    <div class="summary-card">
+      <div>
+        <div class="summary-label">🎯 Elementos / Sites Capturados</div>
+        <div id="kpi-total" class="summary-value">0</div>
+        <div class="summary-sub">Seletores CSS, XPath e Links salvos</div>
+      </div>
+    </div>
+    <div class="summary-card">
+      <div>
+        <div class="summary-label">🟢 Monitorando Ativamente</div>
+        <div id="kpi-running" class="summary-value" style="color: #34d399;">0</div>
+        <div class="summary-sub">Em contagem regressiva agora</div>
+      </div>
+    </div>
+    <div class="summary-card">
+      <div>
+        <div class="summary-label">🚨 Alertas Ativos</div>
+        <div id="kpi-alerts" class="summary-value" style="color: #f87171;">0</div>
+        <div class="summary-sub">Palavras, Cores ou Cards detectados</div>
+      </div>
+    </div>
+    <div class="summary-card">
+      <div>
+        <div class="summary-label">🔄 Total de Ciclos / Reloads</div>
+        <div id="kpi-checks" class="summary-value" style="color: #60a5fa;">0</div>
+        <div class="summary-sub">Inspeções executadas com sucesso</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORMULÁRIO RÁPIDO PARA ADICIONAR NOVO MONITORAMENTO -->
+  <section class="add-panel">
+    <h3>➕ Adicionar Novo Monitoramento Manualmente</h3>
+    <div class="form-grid">
+      <div>
+        <label for="m-name">Nome / Identificação</label>
+        <input id="m-name" type="text" placeholder="Ex: Catálogo de Livros">
+      </div>
+      <div>
+        <label for="m-url">URL da Página</label>
+        <input id="m-url" type="text" placeholder="https://books.toscrape.com/">
+      </div>
+      <div>
+        <label for="m-selector">Seletor CSS ou XPath</label>
+        <input id="m-selector" type="text" placeholder="Ex: article.product_pod">
+      </div>
+      <div>
+        <label for="m-condition">Modo de Disparo</label>
+        <select id="m-condition">
+          <option value="found">🔍 Palavra / Link Aparecer</option>
+          <option value="lost">🚫 Palavra / Link Sumir</option>
+          <option value="color_change">🎨 Mudança de Cor</option>
+          <option value="cards_change">🗂️ Slide / Quadro Alterar Card</option>
+        </select>
+      </div>
+      <div>
+        <label for="m-keyword">Alvo (Palavra / Cor / Card)</label>
+        <input id="m-keyword" type="text" placeholder="Ex: In stock, Vermelho">
+      </div>
+      <div>
+        <label for="m-interval">Intervalo Base (s)</label>
+        <input id="m-interval" type="number" min="1" value="25">
+      </div>
+      <div>
+        <button id="add-monitor-btn" class="btn-primary" type="button" style="width: 100%;">+ Adicionar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODO 1: COLUNAS POR STATUS -->
+  <main id="columns-view" class="columns-container">
+    <div class="monitor-column">
+      <div class="col-header col-running">
+        <h2>🟢 Em Monitoramento Ativo</h2>
+        <span id="count-running" class="badge">0</span>
+      </div>
+      <div id="list-running" class="col-body"></div>
+    </div>
+
+    <div class="monitor-column">
+      <div class="col-header col-triggered">
+        <h2>🚨 Alertas Detectados (Contínuo)</h2>
+        <span id="count-triggered" class="badge">0</span>
+      </div>
+      <div id="list-triggered" class="col-body"></div>
+    </div>
+
+    <div class="monitor-column">
+      <div class="col-header col-paused">
+        <h2>⏸ Pausados / Capturas Salvas</h2>
+        <span id="count-paused" class="badge">0</span>
+      </div>
+      <div id="list-paused" class="col-body"></div>
+    </div>
+  </main>
+
+  <!-- MODO 2: TABELA COMPLETA DE CAPTURAS E CLIQUES -->
+  <section id="table-view" class="table-container hidden" style="display: none;">
+    <table class="watchlist-table">
+      <thead>
+        <tr>
+          <th>Status &amp; Próx. Reload</th>
+          <th>Site / URL</th>
+          <th>Clique Capturado (Tag / CSS / XPath)</th>
+          <th>Cor Base &amp; Cards</th>
+          <th>Regra &amp; Alvo</th>
+          <th>Ciclos</th>
+          <th>Última Leitura</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="watchlist-tbody"></tbody>
+    </table>
+  </section>
+
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

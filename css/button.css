@@ -1,0 +1,242 @@
+/* === MODO DARK / CINZA FOSCO INTELIGENTE PARA PÁGINAS CLARAS === */
+html.arp-dark-page-mode {
+  filter: invert(0.9) hue-rotate(180deg) contrast(0.96) !important;
+  background-color: #12161f !important;
+}
+
+/* Preserva as cores originais de imagens, vídeos, canvas e da própria interface da extensão */
+html.arp-dark-page-mode img,
+html.arp-dark-page-mode video,
+html.arp-dark-page-mode canvas,
+html.arp-dark-page-mode picture,
+html.arp-dark-page-mode svg,
+html.arp-dark-page-mode [style*="background-image"],
+html.arp-dark-page-mode #arp-floating-btn,
+html.arp-dark-page-mode #arp-floating-menu,
+html.arp-dark-page-mode #arp-picker-banner {
+  filter: invert(1) hue-rotate(180deg) !important;
+}
+
+/* === PÍLULA FLUTUANTE NO CANTO INFERIOR DIREITO === */
+#arp-floating-btn {
+  position: fixed !important;
+  bottom: 22px !important;
+  right: 22px !important;
+  background: #181c24 !important;
+  color: #f8fafc !important;
+  padding: 9px 16px !important;
+  border-radius: 999px !important;
+  cursor: pointer !important;
+  z-index: 2147483646 !important;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif !important;
+  font-size: 12.5px !important;
+  font-weight: 700 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55) !important;
+  border: 1px solid #475569 !important;
+  transition: transform 0.2s ease, border-color 0.2s ease !important;
+  user-select: none !important;
+}
+
+#arp-floating-btn:hover {
+  transform: translateY(-2px) !important;
+  border-color: #94a3b8 !important;
+}
+
+#arp-floating-btn.arp-active {
+  background: #064e3b !important;
+  border-color: #10b981 !important;
+  color: #ecfdf5 !important;
+}
+
+#arp-floating-btn.arp-triggered {
+  background: #7f1d1d !important;
+  border-color: #ef4444 !important;
+  animation: arpPulse 1s infinite !important;
+}
+
+.arp-dot {
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50% !important;
+  background: #94a3b8 !important;
+  display: inline-block !important;
+  flex-shrink: 0 !important;
+}
+
+#arp-floating-btn.arp-active .arp-dot {
+  background: #10b981 !important;
+  box-shadow: 0 0 8px #10b981 !important;
+}
+
+#arp-floating-btn.arp-triggered .arp-dot {
+  background: #ef4444 !important;
+  box-shadow: 0 0 8px #ef4444 !important;
+}
+
+@keyframes arpPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+
+/* === JANELA FLUTUANTE DE DEMONSTRAÇÃO E ÁUDIO (TOM CINZA FOSCO) === */
+#arp-floating-menu {
+  position: fixed !important;
+  bottom: 72px !important;
+  right: 22px !important;
+  background: #141821 !important;
+  color: #e2e8f0 !important;
+  padding: 14px 16px !important;
+  border-radius: 14px !important;
+  z-index: 2147483647 !important;
+  width: 320px !important;
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.7) !important;
+  border: 1px solid #334155 !important;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif !important;
+}
+
+.arp-menu-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 10px !important;
+  padding-bottom: 8px !important;
+  border-bottom: 1px solid #262f3f !important;
+}
+
+.arp-menu-title {
+  font-weight: 700 !important;
+  font-size: 13.5px !important;
+  color: #f8fafc !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+.arp-header-right {
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+}
+
+.arp-badge-count {
+  background: #1e293b !important;
+  color: #93c5fd !important;
+  border: 1px solid #334155 !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  padding: 2px 8px !important;
+  border-radius: 999px !important;
+}
+
+#arp-close-menu {
+  background: #27303f !important;
+  color: #cbd5e1 !important;
+  border: 1px solid #334155 !important;
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  transition: all 0.15s ease !important;
+}
+
+#arp-close-menu:hover {
+  background: #ef4444 !important;
+  color: #ffffff !important;
+  border-color: #ef4444 !important;
+}
+
+/* Blocos Internos */
+.arp-demo-item {
+  background: #1d2330 !important;
+  border: 1px solid #2e3a4d !important;
+  border-radius: 8px !important;
+  padding: 8px 10px !important;
+  margin-bottom: 8px !important;
+}
+
+.arp-demo-item:last-child {
+  margin-bottom: 0 !important;
+}
+
+.arp-demo-label {
+  display: block !important;
+  font-size: 10px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  color: #94a3b8 !important;
+  font-weight: 700 !important;
+  margin-bottom: 4px !important;
+}
+
+.arp-demo-value {
+  font-family: 'Segoe UI', system-ui, sans-serif !important;
+  font-size: 12px !important;
+  color: #e2e8f0 !important;
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+  line-height: 1.35 !important;
+}
+
+.arp-demo-value::-webkit-scrollbar {
+  width: 5px !important;
+}
+.arp-demo-value::-webkit-scrollbar-thumb {
+  background: #475569 !important;
+  border-radius: 4px !important;
+}
+
+.arp-demo-value.highlight {
+  color: #34d399 !important;
+  font-weight: 700 !important;
+}
+
+.arp-demo-value.alert-text {
+  color: #fde047 !important;
+  font-weight: 700 !important;
+}
+
+.arp-demo-grid {
+  display: grid !important;
+  grid-template-columns: 1.1fr 1fr !important;
+  gap: 8px !important;
+  margin-bottom: 8px !important;
+}
+
+.arp-demo-grid .arp-demo-item {
+  margin-bottom: 0 !important;
+}
+
+#arp-floating-menu select {
+  width: 100% !important;
+  background: #11151d !important;
+  color: #f1f5f9 !important;
+  border: 1px solid #475569 !important;
+  border-radius: 6px !important;
+  padding: 5px 8px !important;
+  font-size: 11.5px !important;
+  font-weight: 600 !important;
+  outline: none !important;
+  cursor: pointer !important;
+}
+
+#arp-floating-menu select:hover {
+  border-color: #64748b !important;
+}
+
+/* === BORDA AO PASSAR O MOUSE NA CAPTURA === */
+.arp-hover-highlight {
+  outline: 2px solid #38bdf8 !important;
+  outline-offset: -1px !important;
+  background-color: rgba(56, 189, 248, 0.14) !important;
+  cursor: crosshair !important;
+}

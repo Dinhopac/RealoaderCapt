@@ -1,0 +1,377 @@
+:root {
+  --bg-main: #090d16;
+  --bg-card: #111827;
+  --bg-item: #182030;
+  --border: #1f2937;
+  --border-light: #334155;
+  --text: #f8fafc;
+  --muted: #94a3b8;
+  --primary: #3b82f6;
+  --success: #10b981;
+  --danger: #ef4444;
+  --warning: #eab308;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  padding: 22px 26px;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg-main);
+  color: var(--text);
+}
+
+/* === CABEÇALHO === */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.topbar h1 {
+  font-size: 20px;
+  color: #f8fafc;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.topbar p {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.topbar-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+button {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 12.5px;
+  color: #fff;
+  transition: all 0.15s ease;
+}
+
+button:hover {
+  filter: brightness(1.1);
+}
+
+.btn-primary { background: #475569; border-color: #64748b; }
+.btn-success { background: var(--success); }
+.btn-danger { background: var(--danger); }
+.btn-secondary {
+  background: #1e293b;
+  border-color: var(--border-light);
+  color: #cbd5e1;
+}
+.btn-secondary.active {
+  background: var(--primary);
+  border-color: #60a5fa;
+  color: #fff;
+}
+
+/* === BARRA DE RESUMO GERAL (KPIs DE MONITORAMENTO E CLIQUES) === */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.summary-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.summary-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.summary-value {
+  font-size: 24px;
+  font-weight: 800;
+  margin-top: 4px;
+  font-family: 'Cascadia Code', Consolas, monospace;
+}
+
+.summary-sub {
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+/* === FORMULÁRIO DE ADIÇÃO === */
+.add-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 14px 16px;
+  border-radius: 12px;
+  margin-top: 16px;
+}
+
+.add-panel h3 {
+  margin-bottom: 10px;
+  font-size: 13.5px;
+  color: #cbd5e1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+  gap: 10px;
+  align-items: end;
+}
+
+.form-grid label {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.form-grid input,
+.form-grid select {
+  width: 100%;
+  padding: 7px 10px;
+  border-radius: 7px;
+  border: 1px solid var(--border-light);
+  background: #090d16;
+  color: #fff;
+  font-size: 12.5px;
+  outline: none;
+}
+
+/* === VISÃO EM COLUNAS (KANBAN DE MONITORAMENTO) === */
+.columns-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.monitor-column {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  min-height: 460px;
+}
+
+.col-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 12px 12px 0 0;
+}
+
+.col-header h2 {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.col-running { border-top: 3px solid var(--success); }
+.col-triggered { border-top: 3px solid var(--danger); }
+.col-paused { border-top: 3px solid #64748b; }
+
+.badge {
+  background: #1e293b;
+  border: 1px solid var(--border-light);
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+}
+
+.col-body {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* === CARD DE RESUMO DE CADA MONITORAMENTO & CLIQUE === */
+.monitor-card {
+  background: var(--bg-item);
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  padding: 12px;
+  transition: border-color 0.15s ease;
+}
+
+.monitor-card:hover {
+  border-color: #64748b;
+}
+
+.monitor-card.card-triggered {
+  border-color: var(--danger);
+  background: linear-gradient(145deg, rgba(127, 29, 29, 0.35), #182030);
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.card-title {
+  font-weight: 700;
+  font-size: 13.5px;
+  color: #f8fafc;
+}
+
+.card-timer-pill {
+  font-family: 'Cascadia Code', Consolas, monospace;
+  font-size: 11px;
+  font-weight: 700;
+  background: #090d16;
+  color: #34d399;
+  border: 1px solid #334155;
+  padding: 2px 7px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.card-url {
+  display: block;
+  font-size: 11px;
+  color: #60a5fa;
+  text-decoration: none;
+  word-break: break-all;
+  margin-bottom: 8px;
+}
+
+.card-meta-box {
+  background: #0f1522;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 11.5px;
+  color: #cbd5e1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+}
+
+.code-tag {
+  font-family: Consolas, monospace;
+  font-size: 11px;
+  color: #93c5fd;
+  background: #172033;
+  padding: 2px 6px;
+  border-radius: 4px;
+  word-break: break-all;
+}
+
+.color-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 1px solid #fff;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+.card-log {
+  margin-top: 8px;
+  font-size: 11.5px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #e2e8f0;
+}
+
+.card-log.alert {
+  color: #fde047;
+  font-weight: 700;
+  background: rgba(234, 179, 8, 0.12);
+}
+
+.card-actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 6px;
+}
+
+.card-actions button {
+  padding: 6px 10px;
+  font-size: 11.5px;
+  flex: 1;
+}
+
+.card-actions .btn-icon-only {
+  flex: 0 0 auto;
+}
+
+/* === VISÃO TABELA WATCHLIST (ESTILO DISTILL) === */
+.hidden {
+  display: none;
+}
+
+.table-container {
+  margin-top: 18px;
+  background: var(--bg-card);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  overflow-x: auto;
+}
+
+.watchlist-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+.watchlist-table th,
+.watchlist-table td {
+  padding: 11px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.watchlist-table th {
+  background: #182030;
+  color: var(--muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}

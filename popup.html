@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>ReloaderCapt Pro</title>
+  <style>
+    :root {
+      --bg-main: #090d16;
+      --bg-card: #111827;
+      --bg-elevated: #1e293b;
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --primary: #3b82f6;
+      --success: #10b981;
+      --danger: #ef4444;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      width: 365px;
+      background: var(--bg-main);
+      color: var(--text);
+      padding: 14px;
+      overflow: hidden;
+      user-select: none;
+    }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .brand { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; color: #e2e8f0; }
+    .brand-icon { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 1px solid #3b82f6; }
+    .status-pill {
+      font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 999px;
+      background: rgba(239, 68, 68, 0.12); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.25);
+    }
+    .status-pill.active {
+      background: rgba(16, 185, 129, 0.14); color: #34d399; border-color: rgba(16, 185, 129, 0.3);
+    }
+    .player-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      background: linear-gradient(145deg, #111827, #172033);
+      border: 1px solid rgba(59, 130, 246, 0.22); border-radius: 12px;
+      padding: 10px 14px; margin-bottom: 10px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    }
+    .timer-display { display: flex; flex-direction: column; }
+    .timer-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); font-weight: 600; }
+    .timer-row { display: flex; align-items: baseline; gap: 8px; margin-top: 2px; }
+    .timer-digits { font-family: 'Cascadia Code', Consolas, monospace; font-size: 24px; font-weight: 700; color: #f8fafc; line-height: 1; }
+    .timer-digits.running { color: #34d399; text-shadow: 0 0 12px rgba(16, 185, 129, 0.35); }
+    .timer-checks { font-size: 11px; color: #60a5fa; font-weight: 600; }
+    .player-controls { display: flex; align-items: center; gap: 6px; }
+    .icon-btn {
+      width: 34px; height: 34px; border-radius: 9px; border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.04); color: #cbd5e1;
+      display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s ease;
+    }
+    .icon-btn:hover { background: rgba(255, 255, 255, 0.1); color: #fff; transform: translateY(-1px); }
+    .icon-btn.dark-active {
+      background: rgba(250, 204, 21, 0.15);
+      color: #fde047;
+      border-color: rgba(250, 204, 21, 0.45);
+    }
+    .icon-btn svg { width: 16px; height: 16px; fill: currentColor; }
+    .play-btn {
+      width: 40px; height: 40px; border-radius: 10px; border: none;
+      background: linear-gradient(135deg, #10b981, #059669); color: #fff;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+    }
+    .play-btn.running {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35);
+    }
+    .play-btn svg { width: 18px; height: 18px; }
+    .tabs-nav {
+      display: grid; grid-template-columns: 1fr 1fr; background: var(--bg-card);
+      padding: 4px; border-radius: 10px; border: 1px solid var(--border); gap: 4px;
+    }
+    .tab-btn {
+      background: transparent; color: var(--muted); border: 1px solid transparent;
+      padding: 7px 8px; border-radius: 7px; font-size: 12px; font-weight: 600; cursor: pointer;
+    }
+    .tab-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.03); }
+    .tab-btn.active { background: var(--bg-elevated); color: #60a5fa; border-color: rgba(96, 165, 250, 0.3); }
+    .tab-pane { display: none; margin-top: 10px; }
+    .tab-pane.active { display: block; }
+    .section-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 11px 12px; }
+    .section-title { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); font-weight: 700; margin-bottom: 4px; }
+    label { display: block; font-size: 11px; color: #cbd5e1; margin-bottom: 3px; margin-top: 6px; }
+    input, select {
+      width: 100%; background: #090d16; border: 1px solid #1e293b; color: #fff;
+      padding: 6px 8px; border-radius: 6px; font-size: 12px; outline: none;
+    }
+    input:focus, select:focus { border-color: var(--primary); }
+    .row { display: flex; gap: 6px; align-items: center; }
+    .check-row { display: flex; align-items: center; gap: 7px; margin-top: 6px; font-size: 11.5px; color: #cbd5e1; cursor: pointer; }
+    .check-row input[type="checkbox"] { width: 14px; height: 14px; margin: 0; accent-color: var(--primary); cursor: pointer; }
+    .btn-action {
+      width: auto; padding: 6px 10px; border: 1px solid rgba(239, 68, 68, 0.35); border-radius: 6px;
+      font-size: 11.5px; font-weight: 600; color: #fca5a5; background: rgba(239, 68, 68, 0.12); cursor: pointer;
+    }
+    .btn-action:hover { background: #ef4444; color: #fff; }
+    .btn-plus-capture {
+      width: auto; padding: 6px 11px; border: 1px solid #64748b; border-radius: 6px;
+      background: linear-gradient(145deg, #475569, #334155); color: #f8fafc; font-weight: 700; font-size: 12px; cursor: pointer;
+      flex-shrink: 0;
+    }
+    .btn-plus-capture:hover { background: linear-gradient(145deg, #64748b, #475569); border-color: #94a3b8; }
+    .code-input { font-family: Consolas, monospace; font-size: 11.5px; color: #60a5fa; }
+    .chips-box {
+      display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; max-height: 56px; overflow-y: auto;
+      background: #090d16; border: 1px solid #1e293b; border-radius: 6px; padding: 6px;
+      cursor: pointer;
+    }
+    .target-chip {
+      display: inline-flex; align-items: center; gap: 5px; background: #1e293b; color: #e2e8f0;
+      border: 1px solid #475569; border-radius: 999px; padding: 2px 8px; font-size: 10.5px;
+    }
+    .color-dot {
+      width: 8px; height: 8px; border-radius: 50%; display: inline-block; border: 1px solid #fff; flex-shrink: 0;
+    }
+    .chip-del { cursor: pointer; color: #f87171; font-weight: bold; margin-left: 2px; }
+    .word-token {
+      display: inline-block; background: #172033; color: #93c5fd; border: 1px solid #334155;
+      border-radius: 5px; padding: 2px 6px; font-size: 10.5px; cursor: pointer; transition: all 0.12s;
+    }
+    .word-token:hover { background: #2563eb; color: #fff; border-color: #60a5fa; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="brand">
+      <img src="icon.png" alt="Logo" class="brand-icon" onerror="this.style.display='none'">
+      <span>ReloaderCapt Pro</span>
+    </div>
+    <span id="status-badge" class="status-pill">INATIVO</span>
+  </div>
+
+  <!-- BARRA DE CONTAGEM PROGRAMADA + MINI-PLAYER -->
+  <div class="player-bar">
+    <div class="timer-display">
+      <span class="timer-label">Contagem em Background</span>
+      <div class="timer-row">
+        <span id="scheduled-timer" class="timer-digits">00:25</span>
+        <span id="reload-count-label" class="timer-checks">• 0 ciclos</span>
+      </div>
+    </div>
+
+    <div class="player-controls">
+      <button id="toggle-btn" class="icon-btn play-btn" type="button" title="Iniciar / Parar Auto Reload">
+        <svg id="play-icon" viewBox="0 0 24 24">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+      </button>
+
+      <button id="reload-now-btn" class="icon-btn" type="button" title="Recarregar Aba Agora">
+        <svg viewBox="0 0 24 24">
+          <path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+        </svg>
+      </button>
+
+      <button id="dark-mode-btn" class="icon-btn" type="button" title="Fixar Modo Dark / Cinza nesta Aba">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 01-4.4 2.26 5.403 5.403 0 01-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/>
+        </svg>
+      </button>
+
+      <button id="open-dashboard" class="icon-btn" type="button" title="Abrir Monitoramento em Colunas">
+        <svg viewBox="0 0 24 24">
+          <path d="M4 5v13h17V5H4zm10 2v9h-3V7h3zM6 7h3v9H6V7zm13 9h-3V7h3v9z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- BOTÕES DE ABAS -->
+  <div class="tabs-nav">
+    <button id="tab-btn-reloader" class="tab-btn" type="button">
+      🔄 Reloader
+    </button>
+    <button id="tab-btn-monitor" class="tab-btn" type="button">
+      🎯 Alerta &amp; Captura
+    </button>
+  </div>
+
+  <!-- ABA 1: INTERVALO, ANTI-BLOQUEIO & APARÊNCIA -->
+  <div id="tab-reloader" class="tab-pane">
+    <div class="section-card">
+      <div class="section-title">🛡️ Intervalo &amp; Anti-Bloqueio (Salva Automático)</div>
+
+      <div class="row">
+        <div style="flex: 1;">
+          <label for="intervalSec">Base (s):</label>
+          <input id="intervalSec" type="number" min="1" value="25">
+        </div>
+        <div style="flex: 1;">
+          <label for="minSec">Aleatório Mín:</label>
+          <input id="minSec" type="number" min="1" placeholder="Ex: 15">
+        </div>
+        <div style="flex: 1;">
+          <label for="maxSec">Aleatório Máx:</label>
+          <input id="maxSec" type="number" min="2" placeholder="Ex: 40">
+        </div>
+      </div>
+
+      <label class="check-row" for="antiBlockJitter">
+        <input id="antiBlockJitter" type="checkbox">
+        <span>🎲 Variação Humana Automática (Jitter ±25%)</span>
+      </label>
+
+      <label class="check-row" for="stealthMode">
+        <input id="stealthMode" type="checkbox">
+        <span>🕵️ Modo Silencioso (Checar em background sem F5)</span>
+      </label>
+
+      <label class="check-row" for="pauseOnCaptcha">
+        <input id="pauseOnCaptcha" type="checkbox" checked>
+        <span>🛑 Auto-Cooldown se detectar Captcha / Erro 429</span>
+      </label>
+
+      <label class="check-row" for="showFloatingWidget">
+        <input id="showFloatingWidget" type="checkbox" checked>
+        <span>👁️ Mostrar indicador flutuante no canto da página</span>
+      </label>
+
+      <label class="check-row" for="pageDarkMode">
+        <input id="pageDarkMode" type="checkbox">
+        <span>🌙 Fixar Modo Dark / Cinza nesta aba</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- ABA 2: CAPTURA PELO BOTÃO ➕, SELEÇÃO DE PALAVRAS DA FRASE & DETECÇÃO DE COR -->
+  <div id="tab-monitor" class="tab-pane">
+    <div class="section-card">
+      <div class="section-title">🎯 Monitoramento Múltiplo (Palavras, Cores &amp; Links)</div>
+
+      <label for="keyword-dropdown">Lista Acumulada (Clique em ➕ p/ capturar na página):</label>
+      <div class="row">
+        <select id="keyword-dropdown" style="flex: 1;"></select>
+        <button id="add-kw-preset-btn" class="btn-plus-capture" type="button" title="Capturar elemento/frase/cor na página">➕</button>
+        <button id="del-kw-preset-btn" class="btn-action" type="button" title="Apagar TODA a lista acumulada">🗑️</button>
+      </div>
+
+      <!-- Palavras extraídas da frase capturada (clique para escolher palavras contidas na frase) -->
+      <div id="sentence-words-container" style="display: none;">
+        <label>📝 Palavras da frase (Clique nas palavras que deseja vigiar):</label>
+        <div id="sentence-words-box" class="chips-box" style="max-height: 48px;"></div>
+      </div>
+
+      <label for="selector">Seletor CSS ou XPath:</label>
+      <input id="selector" class="code-input" type="text" placeholder="Vários acumulados ou digite um específico">
+
+      <div class="row" style="margin-top: 4px;">
+        <div style="flex: 1.25;">
+          <label for="keyword">Acrescentar Palavra / Cor:</label>
+          <div class="row">
+            <input id="keyword" type="text" placeholder="Digite ou clique em ➡️">
+            <button id="add-term-plus-btn" class="btn-plus-capture" type="button" title="Incluir palavra/cor ou capturar na página">➕</button>
+          </div>
+        </div>
+        <div style="flex: 1.25;">
+          <label for="condition">Aspecto a Vigiar:</label>
+          <select id="condition">
+            <option value="color_or_word">🎨+🔍 Cor Mudar OU Palavra</option>
+            <option value="color_and_word">🎨+🔍 Cor Mudar E Palavra</option>
+            <option value="found">🔍 Palavra / Link Aparecer</option>
+            <option value="color_change">🎨 Apenas Mudar de Cor</option>
+            <option value="lost">🚫 Palavra / Link Sumir</option>
+            <option value="cards_change">🗂️ Alterar Parte / Card</option>
+          </select>
+        </div>
+      </div>
+
+      <label for="soundType">🔊 Som do Alerta Contínuo (Para ao clicar com o mouse):</label>
+      <div class="row">
+        <select id="soundType" style="flex: 1; color: #fde047; font-weight: 600;">
+          <option value="chime">🔔 Sino Cristalino (Padrão)</option>
+          <option value="siren">🚨 Sirene de Emergência</option>
+          <option value="radar">📡 Sonar / Radar Militar</option>
+          <option value="arcade">👾 8-Bit Arcade (Retrô)</option>
+          <option value="urgent">⚠️ Bip Triplo Urgente</option>
+          <option value="mute">🔇 Silencioso (Sem Som)</option>
+        </select>
+        <button id="test-sound-btn" class="btn-plus-capture" type="button" style="color: #fde047;" title="Ouvir / Testar som agora">🔊</button>
+      </div>
+
+      <label>Alvos e Cores Acumulados nesta Página:</label>
+      <div id="accumulated-chips" class="chips-box" title="Clique em ➕ para coletar palavras ou cores da página">
+        <span style="font-size:11px; color:#94a3b8;">Nenhum alvo acumulado ainda. Clique em <b>➕</b> para coletar!</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/popup.js"></script>
+</body>
+</html>
